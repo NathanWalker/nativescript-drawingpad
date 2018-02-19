@@ -86,7 +86,7 @@ export class DrawingPad extends DrawingPadBase {
       if (this.backgroundColor) {
         let color = this.backgroundColor;
         if (color.constructor == Color) {
-          color = color.ios;
+          color = (<Color>color).ios;
         } else if (color.constructor == String) {
           color = new Color(<any>color).ios;
         }

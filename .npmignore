@@ -5,6 +5,7 @@
 *.sln
 demo/
 screens/
+node_modules/
 *.gitattributes
 *.ts
 !*.d.ts
