@@ -44,10 +44,17 @@ export class DrawingPad extends DrawingPadBase {
     this.nativeView.setPenColor(color);
   }
 
+  public isEmpty() {
+    if (this.nativeView) {
+      return this.nativeView.isEmpty();
+    }
+    return true;
+  }
+
   public getDrawing(): Promise<any> {
     return new Promise((resolve, reject) => {
       try {
-        if (!this.nativeView.isEmpty()) {
+        if (!this.isEmpty()) {
           let data = this.nativeView.getSignatureBitmap();
           resolve(data);
         } else {
@@ -62,7 +69,7 @@ export class DrawingPad extends DrawingPadBase {
   public getTransparentDrawing(): Promise<any> {
     return new Promise((resolve, reject) => {
       try {
-        if (!this.nativeView.isEmpty()) {
+        if (!this.isEmpty()) {
           let data = this.nativeView.getTransparentSignatureBitmap();
           resolve(data);
         } else {
@@ -77,7 +84,7 @@ export class DrawingPad extends DrawingPadBase {
   public getDrawingSvg(): Promise<string> {
     return new Promise((resolve, reject) => {
       try {
-        if (!this.nativeView.isEmpty()) {
+        if (!this.isEmpty()) {
           let data: string = this.nativeView.getSignatureSvg();
 
           // Append viewbox to the svg for correct scaling

@@ -2,7 +2,8 @@ import { Color } from "color";
 import {
   DrawingPadBase,
   penColorProperty,
-  penWidthProperty
+  penWidthProperty,
+  smoothingProperty
 } from "./drawingpad-common";
 
 declare var SignatureView: any;
@@ -38,6 +39,13 @@ export class DrawingPad extends DrawingPadBase {
     this.nativeView.setLineColor(color);
   }
 
+  [smoothingProperty.getDefault](): boolean {
+    return this.nativeView.smoothing;
+  }
+  [smoothingProperty.setNative](value: boolean) {
+    this.nativeView.enableSmoothing(value);
+  }
+
   public onLoaded() {
     // console.log(`onLoaded ${this.width}, ${this.height}`);
     if (this.width) {
@@ -49,11 +57,17 @@ export class DrawingPad extends DrawingPadBase {
     super.onLoaded();
   }
 
+  public isEmpty() {
+    if (this.nativeView) {
+      return !this.nativeView.isSigned();
+    }
+    return true;
+  }
+
   public getDrawing(): Promise<any> {
     return new Promise((resolve, reject) => {
       try {
-        let isSigned = this.nativeView.isSigned();
-        if (isSigned === true) {
+        if (!this.isEmpty()) {
           let data = this.nativeView.signatureImage();
           resolve(data);
         } else {
@@ -68,8 +82,7 @@ export class DrawingPad extends DrawingPadBase {
   public getDrawingSvg(): Promise<string> {
     return new Promise((resolve, reject) => {
       try {
-        let isSigned = this.nativeView.isSigned();
-        if (isSigned === true) {
+        if (!this.isEmpty()) {
           let data = this.nativeView.signatureSvg();
           resolve(data);
         } else {

@@ -8,9 +8,11 @@ export abstract class DrawingPadBase extends View
   implements DrawingPadDefinition {
   public penColor: Color;
   public penWidth: number;
+  public smoothing: boolean;
 
   public abstract clearDrawing(): void;
   public abstract getDrawing(): Promise<any>;
+  public abstract isEmpty(): boolean;
   public getTransparentDrawing(): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       resolve();
@@ -32,3 +34,10 @@ export const penWidthProperty = new Property<DrawingPadBase, number>({
   valueConverter: v => +v
 });
 penWidthProperty.register(DrawingPadBase);
+
+export const smoothingProperty = new Property<DrawingPadBase, boolean>({
+  name: "smoothing",
+  defaultValue: true,
+  valueConverter: v => v === "true"
+});
+smoothingProperty.register(DrawingPadBase);
